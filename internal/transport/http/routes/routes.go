@@ -6,7 +6,7 @@ import (
 )
 
 type Handler interface {
-	CreateQuote(w http.ResponseWriter, r *http.Request)
+	AddQuote(w http.ResponseWriter, r *http.Request)
 	GetQuotes(w http.ResponseWriter, r *http.Request)
 	GetRandomQuote(w http.ResponseWriter, r *http.Request)
 	DeleteQuote(w http.ResponseWriter, r *http.Request)
@@ -17,7 +17,7 @@ type Limiter interface {
 }
 
 func RegistrateRoutes(h Handler, limiter Limiter, mux *http.ServeMux) {
-	mux.HandleFunc("POST /quotes", limiter.RateLimitMiddleware(middleware.LoggingMiddleware(h.CreateQuote)))
+	mux.HandleFunc("POST /quotes", limiter.RateLimitMiddleware(middleware.LoggingMiddleware(h.AddQuote)))
 
 	mux.HandleFunc("GET /quotes", limiter.RateLimitMiddleware(middleware.LoggingMiddleware(h.GetQuotes)))
 

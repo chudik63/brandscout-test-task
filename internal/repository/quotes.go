@@ -2,6 +2,7 @@ package repository
 
 import (
 	"brandscout-test-task/internal/models"
+	"context"
 	"errors"
 	"sync"
 
@@ -23,7 +24,7 @@ func New() *QuotesRepository {
 	}
 }
 
-func (r *QuotesRepository) AddQuote(quote *models.Quote) {
+func (r *QuotesRepository) AddQuote(ctx context.Context, quote *models.Quote) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
@@ -32,7 +33,7 @@ func (r *QuotesRepository) AddQuote(quote *models.Quote) {
 	r.quotes[id] = quote
 }
 
-func (r *QuotesRepository) GetRandomQuote() (*models.Quote, error) {
+func (r *QuotesRepository) GetRandomQuote(ctx context.Context) (*models.Quote, error) {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
 
@@ -45,7 +46,7 @@ func (r *QuotesRepository) GetRandomQuote() (*models.Quote, error) {
 	return r.quotes[uint64(randID)], nil
 }
 
-func (r *QuotesRepository) GetQuotesByAuthor(author string) ([]*models.Quote, error) {
+func (r *QuotesRepository) GetQuotesByAuthor(ctx context.Context, author string) ([]*models.Quote, error) {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
 
@@ -63,7 +64,7 @@ func (r *QuotesRepository) GetQuotesByAuthor(author string) ([]*models.Quote, er
 	return quotes, nil
 }
 
-func (r *QuotesRepository) GetQuote(id uint64) (*models.Quote, error) {
+func (r *QuotesRepository) GetQuote(ctx context.Context, id uint64) (*models.Quote, error) {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
 
@@ -75,7 +76,7 @@ func (r *QuotesRepository) GetQuote(id uint64) (*models.Quote, error) {
 	return quote, nil
 }
 
-func (r *QuotesRepository) DeleteQuote(id uint64) error {
+func (r *QuotesRepository) DeleteQuote(ctx context.Context, id uint64) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
@@ -90,7 +91,7 @@ func (r *QuotesRepository) DeleteQuote(id uint64) error {
 	return nil
 }
 
-func (r *QuotesRepository) GetAllQuotes() ([]*models.Quote, error) {
+func (r *QuotesRepository) GetAllQuotes(ctx context.Context) ([]*models.Quote, error) {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
 
