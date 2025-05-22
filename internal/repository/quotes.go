@@ -42,7 +42,7 @@ func (r *QuotesRepository) GetRandomQuote(ctx context.Context) (*models.Quote, e
 		return nil, ErrNotFound
 	}
 
-	randID := rand.IntN(len(r.quotes))
+	randID := rand.IntN(len(r.quotes)) + 1
 
 	return r.quotes[uint64(randID)], nil
 }
