@@ -3,6 +3,7 @@ package service
 import (
 	"brandscout-test-task/internal/models"
 	"context"
+	"time"
 )
 
 //go:generate go run github.com/vektra/mockery/v2@latest --name QuotesRepository
@@ -26,6 +27,7 @@ func New(repo QuotesRepository) *QuotesService {
 }
 
 func (s *QuotesService) AddQuote(ctx context.Context, quote *models.Quote) {
+	quote.CreatedAt = time.Now()
 	s.repo.AddQuote(ctx, quote)
 }
 
