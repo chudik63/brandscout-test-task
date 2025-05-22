@@ -14,7 +14,6 @@ var (
 
 type (
 	HTTPConfig struct {
-		Host               string        `env:"HTTP_HOST"`
 		Port               string        `env:"HTTP_PORT"`
 		ReadTimeout        time.Duration `env:"READ_TIMEOUT"`
 		WriteTimeout       time.Duration `env:"WRITE_TIMEOUT"`
