@@ -4,7 +4,6 @@ go 1.23.5
 
 require (
 	github.com/ilyakaznacheev/cleanenv v1.5.0
-	golang.org/x/exp v0.0.0-20250506013437-ce4c2cf36ca6
 	golang.org/x/time v0.11.0
 )
 

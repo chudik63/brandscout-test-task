@@ -2,9 +2,14 @@ package repository
 
 import (
 	"brandscout-test-task/internal/models"
+	"errors"
 	"sync"
 
 	"math/rand/v2"
+)
+
+var (
+	ErrNotFound = errors.New("nothing was found")
 )
 
 type QuotesRepository struct {
@@ -22,23 +27,25 @@ func (r *QuotesRepository) AddQuote(quote *models.Quote) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
-	r.quotes[quote.ID] = quote
+	id := uint64(len(r.quotes) + 1)
+
+	r.quotes[id] = quote
 }
 
-func (r *QuotesRepository) GetRandomQuote() *models.Quote {
+func (r *QuotesRepository) GetRandomQuote() (*models.Quote, error) {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
 
 	if len(r.quotes) == 0 {
-		return nil
+		return nil, ErrNotFound
 	}
 
 	randID := rand.IntN(len(r.quotes))
 
-	return r.quotes[uint64(randID)]
+	return r.quotes[uint64(randID)], nil
 }
 
-func (r *QuotesRepository) GetQuotesByAuthor(author string) []*models.Quote {
+func (r *QuotesRepository) GetQuotesByAuthor(author string) ([]*models.Quote, error) {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
 
@@ -49,32 +56,52 @@ func (r *QuotesRepository) GetQuotesByAuthor(author string) []*models.Quote {
 		}
 	}
 
-	return quotes
+	if len(quotes) == 0 {
+		return nil, ErrNotFound
+	}
+
+	return quotes, nil
 }
 
-func (r *QuotesRepository) GetQuote(id uint64) (*models.Quote, bool) {
+func (r *QuotesRepository) GetQuote(id uint64) (*models.Quote, error) {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
 
 	quote, exists := r.quotes[id]
-	return quote, exists
+	if !exists {
+		return nil, ErrNotFound
+	}
+
+	return quote, nil
 }
 
-func (r *QuotesRepository) DeleteQuote(id uint64) {
+func (r *QuotesRepository) DeleteQuote(id uint64) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
+	_, exists := r.quotes[id]
+
+	if !exists {
+		return ErrNotFound
+	}
+
 	delete(r.quotes, id)
+
+	return nil
 }
 
-func (r *QuotesRepository) GetAllQuotes() []*models.Quote {
+func (r *QuotesRepository) GetAllQuotes() ([]*models.Quote, error) {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
+
+	if len(r.quotes) == 0 {
+		return nil, ErrNotFound
+	}
 
 	quotes := make([]*models.Quote, 0, len(r.quotes))
 	for _, quote := range r.quotes {
 		quotes = append(quotes, quote)
 	}
 
-	return quotes
+	return quotes, nil
 }
