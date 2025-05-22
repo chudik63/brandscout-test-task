@@ -3,6 +3,8 @@ package repository
 import (
 	"brandscout-test-task/internal/models"
 	"sync"
+
+	"math/rand/v2"
 )
 
 type QuotesRepository struct {
@@ -21,6 +23,33 @@ func (r *QuotesRepository) AddQuote(quote *models.Quote) {
 	defer r.mu.Unlock()
 
 	r.quotes[quote.ID] = quote
+}
+
+func (r *QuotesRepository) GetRandomQuote() *models.Quote {
+	r.mu.RLock()
+	defer r.mu.RUnlock()
+
+	if len(r.quotes) == 0 {
+		return nil
+	}
+
+	randID := rand.IntN(len(r.quotes))
+
+	return r.quotes[uint64(randID)]
+}
+
+func (r *QuotesRepository) GetQuotesByAuthor(author string) []*models.Quote {
+	r.mu.RLock()
+	defer r.mu.RUnlock()
+
+	quotes := make([]*models.Quote, 0)
+	for _, quote := range r.quotes {
+		if quote.Author == author {
+			quotes = append(quotes, quote)
+		}
+	}
+
+	return quotes
 }
 
 func (r *QuotesRepository) GetQuote(id uint64) (*models.Quote, bool) {

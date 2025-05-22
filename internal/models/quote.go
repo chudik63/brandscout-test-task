@@ -1,7 +1,10 @@
 package models
 
+import "time"
+
 type Quote struct {
-	ID     uint64
-	Author string
-	Text   string
+	ID        uint64
+	Author    string
+	Quote     string
+	CreatedAt time.Time
 }
