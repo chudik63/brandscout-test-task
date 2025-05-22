@@ -29,6 +29,7 @@ func (r *QuotesRepository) AddQuote(ctx context.Context, quote *models.Quote) {
 	defer r.mu.Unlock()
 
 	id := uint64(len(r.quotes) + 1)
+	quote.ID = id
 
 	r.quotes[id] = quote
 }
