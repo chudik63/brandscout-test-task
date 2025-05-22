@@ -57,6 +57,11 @@ func (h *Handler) GetQuotes(w http.ResponseWriter, r *http.Request) {
 
 	quotes, err := h.service.GetAllQuotes(ctx, author)
 	if err != nil {
+		if errors.Is(err, repository.ErrNotFound) {
+			http.Error(w, "No quotes found", http.StatusNotFound)
+			return
+		}
+
 		log.Println("Failed to get quotes:", err)
 		http.Error(w, "Failed to retrieve quotes", http.StatusInternalServerError)
 		return
@@ -72,6 +77,11 @@ func (h *Handler) GetRandomQuote(w http.ResponseWriter, r *http.Request) {
 
 	quote, err := h.service.GetRandomQuote(ctx)
 	if err != nil {
+		if errors.Is(err, repository.ErrNotFound) {
+			http.Error(w, "No quotes found", http.StatusNotFound)
+			return
+		}
+
 		log.Println("Failed to get random quote:", err)
 		http.Error(w, "Failed to retrieve quote", http.StatusInternalServerError)
 		return
@@ -103,5 +113,5 @@ func (h *Handler) DeleteQuote(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.WriteHeader(http.StatusNoContent)
+	w.WriteHeader(http.StatusOK)
 }
