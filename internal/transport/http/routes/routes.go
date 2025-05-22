@@ -23,5 +23,5 @@ func RegistrateRoutes(h Handler, limiter Limiter, mux *http.ServeMux) {
 
 	mux.HandleFunc("GET /quotes/random", limiter.RateLimitMiddleware(middleware.LoggingMiddleware(h.GetRandomQuote)))
 
-	mux.HandleFunc("DELETE /quotes/:id", limiter.RateLimitMiddleware(middleware.LoggingMiddleware(h.DeleteQuote)))
+	mux.HandleFunc("DELETE /quotes/", limiter.RateLimitMiddleware(middleware.LoggingMiddleware(h.DeleteQuote)))
 }
