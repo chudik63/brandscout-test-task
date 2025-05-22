@@ -5,6 +5,7 @@ import (
 	"context"
 )
 
+//go:generate go run github.com/vektra/mockery/v2@latest --name QuotesRepository
 type QuotesRepository interface {
 	AddQuote(ctx context.Context, quote *models.Quote)
 	GetQuotesByAuthor(ctx context.Context, author string) ([]*models.Quote, error)

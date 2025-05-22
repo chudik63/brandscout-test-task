@@ -46,6 +46,8 @@ func (h *Handler) AddQuote(w http.ResponseWriter, r *http.Request) {
 
 	h.service.AddQuote(ctx, &quote)
 
+	log.Printf("quote added: %#v\n", quote)
+
 	w.WriteHeader(http.StatusCreated)
 }
 
@@ -112,6 +114,8 @@ func (h *Handler) DeleteQuote(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to delete quote", http.StatusInternalServerError)
 		return
 	}
+
+	log.Printf("quote deleted: %d\n", id)
 
 	w.WriteHeader(http.StatusOK)
 }
