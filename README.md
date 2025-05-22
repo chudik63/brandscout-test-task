@@ -46,16 +46,10 @@ Responses:
 ```json
 {
     {
-        id: 1,
-        author: "Author1",
-        quote: "Quote1",
-        created_at: "2023-01-01"
-    },
-    {   
-        id: 2,
-        author: "Author2",
-        quote: "Quote2",
-        created_at: "2023-01-02"
+        "id": 1,
+        "author": "Author1",
+        "quote": "Quote1",
+        "created_at": "2023-01-01"
     },
 }
 ```
@@ -71,10 +65,10 @@ Responses:
 - 200 OK
 ```json
 {
-    id: 1,
-    author: "Author1",
-    quote: "Quote1",
-    created_at: "2023-01-01"
+    "id": 1,
+    "author": "Author1",
+    "quote": "Quote1",
+    "created_at": "2023-01-01"
 },
 ```
 - 404 Not found
@@ -89,10 +83,10 @@ Responses:
 - 200 OK
 ```json
 {
-    id: 1,
-    author: "Author2",
-    quote: "Quote2",
-    created_at: "2023-01-02"
+    "id": 1,
+    "author": "Author2",
+    "quote": "Quote2",
+    "created_at": "2023-01-02"
 },
 ```
 - 404 Not found
